@@ -8,6 +8,7 @@ Created on Thu Feb  1 19:42:39 2018
 
 import urllib.request, urllib.parse, urllib.error
 from bs4 import BeautifulSoup
+import pandas as pd
 
 #%%
 years = ['2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015',
@@ -44,3 +45,9 @@ for year in years:
             info['share'] = td.next_sibling.next_sibling.text[:-1]
             
             finalists.append(info)
+
+df = pd.DataFrame(finalists)
+cols = ['year', 'league', 'rank', 'name', 'points_won', 'votes_first', 'share']
+df = df[cols]
+
+df.to_csv('cy_young_finalists.csv', index=False)
