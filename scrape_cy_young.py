@@ -35,19 +35,19 @@ for year in years:
         body = new_soup.find('tbody')
         for tr in body.findAll('tr'):
             info = {}
-            info['year'] = year
-            info['league'] = leagues[ix]
-            info['rank'] = tr.find('th', class_='right').text
-            info['name'] = tr.find('a').text
+            info['Season'] = year
+            info['League'] = leagues[ix]
+            info['Rank'] = tr.find('th', class_='right').text
+            info['Name'] = tr.find('a').text
             td = tr.find('td').next_sibling.next_sibling
-            info['points_won'] = td.text
-            info['votes_first'] = td.next_sibling.text
-            info['share'] = td.next_sibling.next_sibling.text[:-1]
+            info['Points_won'] = td.text
+            info['Votes_first'] = td.next_sibling.text
+            info['Share'] = td.next_sibling.next_sibling.text[:-1]
             
             finalists.append(info)
 
 df = pd.DataFrame(finalists)
-cols = ['year', 'league', 'rank', 'name', 'points_won', 'votes_first', 'share']
+cols = ['Season', 'League', 'Rank', 'Name', 'Points_won', 'Votes_first', 'Share']
 df = df[cols]
 
 df.to_csv('cy_young_finalists.csv', index=False)
