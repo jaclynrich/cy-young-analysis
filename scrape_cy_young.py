@@ -50,4 +50,4 @@ df = pd.DataFrame(finalists)
 cols = ['Season', 'League', 'Rank', 'Name', 'Points_won', 'Votes_first', 'Share']
 df = df[cols]
 
-df.to_csv('cy_young_finalists.csv', index=False)
+df.to_csv('data/cy_young_finalists.csv', index=False)
