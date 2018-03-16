@@ -23,7 +23,7 @@ for year in years:
         url_pieces = ['https://legacy.baseballprospectus.com/pitchfx/',
                       'leaderboards/index.php?hand=&reportType=pfx&prp=P',
                       '&month=&year=', year, '&pitch=', pitch, 
-                      '&ds=velo&lim=200']
+                      '&ds=velo&lim=0']
         url = ''.join(url_pieces)
         
         print(year, pitch)
@@ -59,8 +59,7 @@ for year in years:
                     info[key] = tds[pos].text
             stats.append(info)
             
-#%%
-            
+#%%          
 unagg = pd.DataFrame(stats)
 
 # Replace nulls with '' to preserve, but ignore them
@@ -70,4 +69,23 @@ aggregated = unagg.fillna('').groupby(['Name', 'Season']).sum()
 df = aggregated.unstack(level=0).reset_index()
 df = pd.DataFrame(aggregated.to_records())
 
-df.to_csv('data/baseball_prospectus_pitchfx.csv', index=False)
+#%%
+# Names that are inconsistent that need to be fixed
+names_to_fix = {'Nate Karns': 'Nathan Karns',
+                'Jorge De La Rosa': 'Jorge de la Rosa',
+                'J.C. Ramirez': 'JC Ramirez',
+                'Vincent Velasquez': 'Vince Velasquez',
+                'Hyun-jin Ryu': 'Hyun-Jin Ryu',
+                'Rubby De La Rosa': 'Rubby de la Rosa',
+                'Jake Junis': 'Jakob Junis',
+                'Samuel Gaviglio': 'Sam Gaviglio',
+                'Robbie Ross': 'Robbie Ross Jr.',
+                'Lucas Sims': 'Luke Sims',
+                'Zachary Neal': 'Zach Neal',
+                'Robert Whalen': 'Rob Whalen',
+                'Ramon A. Ramirez': 'Ramon Ramirez',
+                'Jacob Faria': 'Jake Faria',
+                'Andy Oliver': 'Andrew Oliver'}
+fixed_names = df.replace({'Name': names_to_fix})
+
+fixed_names.to_csv('data/baseball_prospectus_pitchfx.csv', index=False)
