@@ -15,8 +15,6 @@ years = ['2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015',
          '2016', '2017']
 
 pitch_types = ['FA', 'SI', 'FC', 'CU', 'SL', 'CH', 'FS', 'SB', 'KN']
-long_names = ['fourseam', 'sinker', 'cutter', 'curve', 'slider', 'change',
-              'splitter', 'screwball', 'knuckleball']
 
 stats = []
 for year in years:
@@ -28,6 +26,8 @@ for year in years:
                       '&ds=velo&lim=200']
         url = ''.join(url_pieces)
         
+        print(year, pitch)
+        
         html = urllib.request.urlopen(url).read()
         soup = BeautifulSoup(html, 'lxml')
         table = soup.find('tbody')
@@ -37,25 +37,37 @@ for year in years:
             tds = tr.findAll('td')
         
             info = {}
-            info['year'] = year
-            info['pitch_type'] = pitch
-            info['name'] = tds[1].text
-            info['throws'] = tds[3].text
-            info['num_pitches'] = tds[4].text
-            info['velocity'] = tds[5].text
-            info['H_movement'] = tds[6].text
-            info['V_movement'] = tds[7].text
-            info['swing_rate'] = tds[8].text[:-1]
-            info['whiff/swing'] = tds[9].text[:-1]
-            info['foul/swing'] = tds[10].text[:-1]
-            info['GB/FB'] = tds[11].text
-            info['GB/BIP'] = tds[12].text[:-1]
-            info['LD/BIP'] = tds[13].text[:-1]
-            info['FB/BIP'] = tds[14].text[:-1]
-            info['PU/BIP'] = tds[15].text[:-1]
+            info['Season'] = year
+            info['Name'] = tds[1].text
             
+            # Create keys that have the fields concatenated with the pitch type
+            fields = ['Num_pitches_', 'Velocity_', 'H_movement_',
+                      'V_movement_', 'Swing_rate_', 'Whiff/swing_',
+                      'Foul/swing_', 'GB/FB_', 'GB/BIP_', 'LD/BIP_',
+                      'FB/BIP_', 'PU/BIP_']
+            td_pos = list(range(4, 16))
+            field_pos = zip(fields, td_pos)
+            
+            # Leave out percent character in string
+            less_one_pos = [8, 9, 10, 12, 13, 14, 15]
+            
+            for field, pos in zip(fields, td_pos):
+                key = field + pitch
+                if pos in less_one_pos:
+                    info[key] = tds[pos].text[:-1]
+                else:
+                    info[key] = tds[pos].text
             stats.append(info)
-
+            
 #%%
-df = pd.DataFrame(stats)
-df.to_csv('baseball_prospectus_pitchfx.csv', index=False)
+            
+unagg = pd.DataFrame(stats)
+
+# Replace nulls with '' to preserve, but ignore them
+aggregated = unagg.fillna('').groupby(['Name', 'Season']).sum()
+
+# Reformat the data into a flat file
+df = aggregated.unstack(level=0).reset_index()
+df = pd.DataFrame(aggregated.to_records())
+
+df.to_csv('data/baseball_prospectus_pitchfx.csv', index=False)
