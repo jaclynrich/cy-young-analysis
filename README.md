@@ -12,9 +12,11 @@ In this project, I investigate what sets Cy Young Award (CYA) winning pitchers a
 ### Data Gathering and Wrangling
 [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) was used for scraping.
 
-*  Scraped PITCHf/x data for starting pitchers from [Baseball Prospectus](https://legacy.baseballprospectus.com/pitchfx/leaderboards/) in scrape_pitchfx.py and saved in baseball_prospectus_pitchfx.csv
-*  Scraped Cy Young Award data from [Baseball Reference](http://www.baseball-reference.com/awards) in scrape_cy_young.py and saved in cy_young_finalists.csv
-* Downloaded pitching data from [Fangraphs](https://www.fangraphs.com/leaders.aspx?pos=all&stats=pit&lg=all&qual=10&type=8&season=2017&month=0&season1=2017&ind=0&team=0&rost=0&age=0&filter=&players=0)
+*  Scraped PITCHf/x data for starting pitchers from [Baseball Prospectus](https://legacy.baseballprospectus.com/pitchfx/leaderboards/) in scrape_pitchfx.py
+  - Saved in baseball_prospectus_pitchfx.csv
+*  Scraped Cy Young Award data from [Baseball Reference](http://www.baseball-reference.com/awards) in scrape_cy_young.py
+  - Saved in cy_young_finalists.csv
+* Downloaded pitching data from [FanGraphs](https://www.fangraphs.com/leaders.aspx?pos=all&stats=pit&lg=all&qual=10&type=8&season=2017&month=0&season1=2017&ind=0&team=0&rost=0&age=0&filter=&players=0)
   - Requested starting pitchers with at least 20 innings pitched
   - Did some basic cleaning in Excel - removed percents and any duplicate fields
   - Saved in 'fangraphs' sheet of starters_2008-2017.xlsx
@@ -28,4 +30,4 @@ In this project, I investigate what sets Cy Young Award (CYA) winning pitchers a
 
 
 
-For those unfamiliar with baseball, [Fangraphs'](https://www.fangraphs.com/library/pitching/complete-list-pitching/) glossary has explanations for most of the metrics and [MLB's](http://m.mlb.com/glossary/statcast/expected-woba) glossary has explanations for the Statcast fields.
+For those unfamiliar with baseball, [FanGraphs'](https://www.fangraphs.com/library/pitching/complete-list-pitching/) glossary has explanations for most of the metrics and [MLB's](http://m.mlb.com/glossary/statcast/expected-woba) glossary has explanations for the Statcast fields.
